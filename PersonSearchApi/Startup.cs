@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Serialization;
 using PersonSearchApi.Data.Mappers;
 using PersonSearchApi.Data.Models;
 using PersonSearchApi.Helper;
@@ -33,19 +34,26 @@ namespace PersonSearchApi
       services.AddDbContext<PersonDbContext>(options =>
         options.UseInMemoryDatabase("PersonDB"));
 
+
       services.AddCors(options =>
       {
         options.AddPolicy("AllowOrigin",
-          builder => builder.WithOrigins("http://localhost:4700"));
+          builder => builder.WithOrigins("http://localhost:4200"));
       });
 
       services.AddScoped<IPersonService, PersonService>();
       services.AddAutoMapper(typeof(MappingProfiles));
       services.AddControllers()
+        .AddJsonOptions(options =>
+        {
+          options.JsonSerializerOptions.PropertyNameCaseInsensitive = true; // Pascal casing
+          options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        })
         .ConfigureApiBehaviorOptions(options =>
         {
           //options.SuppressModelStateInvalidFilter = true; //prevents auto validation
         });
+
       services.AddApiVersioning(options =>
       {
         options.ReportApiVersions = true;
@@ -75,6 +83,8 @@ namespace PersonSearchApi
       app.UseRouting();
 
       app.UseAuthorization();
+
+      app.UseCors();
 
       app.UseEndpoints(endpoints =>
       {

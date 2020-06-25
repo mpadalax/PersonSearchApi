@@ -1,0 +1,41 @@
+<app-header></app-header>
+
+<div *ngIf="isLoadingResults">
+    <i>Loading...</i>
+    <i class="spinner-border" style="font-size:24px"></i>
+</div>
+<div [formGroup]="peopleGroup">
+    <!-- <label for="searchTerm">Enter Search Text:</label> -->
+    <mat-label color='red'>Search: &nbsp;</mat-label>
+
+    <input formControlName="searchTerm" type="text" placeholder="Enter Name" name='searchTerm' [value]='searchTerm$'
+        (keyup)="isLoadingResults=true; searchTerm$.next($event.target.value)" />
+</div>
+<hr />
+<!-- <button (click)="callService()">Get</button> -->
+<div *ngIf="!isLoadingResults" class="container">
+    <p *ngIf="peopleData !== undefined && peopleData.length===0" class="text-warning">No person exists</p>
+    
+    <div class="content">
+        <table class="table table-condensed table-striped" *ngIf="peopleData !== undefined && peopleData.length > 0">
+            <thead>
+                <th>&nbsp;</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Email</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let person of peopleData" (click)="showData(person)" (mouseout)="hoverRow($event)">
+                    <td><img src="{{person.Picture}}"></td>
+                    <td>{{person.FirstName}} {{person.LastName}} </td>
+                    <td>{{ person.Age}}</td>
+                    <td>{{person.Email}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p>{{selected}}</p>
+</div>
+
+<app-footer></app-footer>

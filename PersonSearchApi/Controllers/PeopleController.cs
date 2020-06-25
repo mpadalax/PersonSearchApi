@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using PersonSearchApi.Data.Dtos;
 using PersonSearchApi.Services;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 namespace PersonSearchApi.Controllers
 {
   [ApiVersion("1.0")]
+  [EnableCors("AllowOrigin")]
   [Route("person")]
   [ApiController]
   public class PeopleController : ControllerBase
